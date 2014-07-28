@@ -1,0 +1,173 @@
+﻿@model IEnumerable<Student>
+
+@using CRUDDemo.Models
+
+
+@{
+    ViewBag.Title = "Student";
+}
+<div>
+    <div>
+        <h2>Students</h2>
+    </div>
+    <p>Click the button to get student list.</p>
+    <input type="button" id="btn" name="btn" value="Get List" />
+
+    <div id="student" />
+</div>
+<div id="EditDept" style="display:none">
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>DepartmentName</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" id="txtId" name="txtId" />
+            </td>
+            <td>
+                <input id="txtDept" type="text" name="txtDept" />
+            </td>
+        </tr>
+    </table>
+    <input type="button" id="btnEdit" name="btnEdit" value="Update" />
+</div>
+<div id="CreateNew" style="display:none">
+    <table>
+        <tr>
+
+            <th> Name </th>
+            <th> Department Name</th>
+        </tr>
+        <tr>
+
+            <td>
+                <input id="txtName" type="text" name="txtName" />
+            </td>
+
+            <td>
+                <input id="txtDept" type="text" name="txtDept" />
+            </td>
+        </tr>
+    </table>
+    <input type="button" id="btnCreate" name="btnCreate" value="Save" />
+
+</div>
+<div id="Delete" style="display:none">
+    <table>
+        <tr>
+
+            <th> Id </th>
+        </tr>
+        <tr>
+
+            <td>
+                <input id="txtId" type="text" name="txtId" />
+            </td>
+        </tr>
+    </table>
+    <input type="button" id="btnDelete" name="btndelete" value="Delete" />
+
+</div>
+
+
+@section Scripts{
+    <script>
+
+
+        $('#btn').click(function () {
+
+            $.ajax({
+                url: '/Student/GetStudentList',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+              .success(function (result) {
+                  $('#student').html(result);
+                  $('#CreateNew').show().appendTo($('#student'));
+
+                 
+
+                  $('#Delete').show().appendTo($('#student'));
+
+             })
+        .error(function (xhr, status) {
+            alert("Error");
+        })
+        });
+
+        $('#btnEdit').click(function () {
+            var idVal = $('#txtId').val();
+            var Deptname = $('#txtDept').val();
+
+            $.ajax({
+                url: '/Student/Edit',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                data: { id: idVal, Deptn: Deptname },
+                datatype: 'html'
+            })
+            .success(function (result) {
+                $('#student').html(result);
+
+            })
+
+                .error(function (xhr, status) {
+                    alert("Record not updated.");
+                })
+
+        });
+
+
+        $('#btnDelete').click(function () {
+
+            var idVal = $('#txtId').val();
+            $.ajax({
+
+                url: '/Student/Delete',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                data: { id: idVal },
+                datatype: 'html'
+
+            })
+                  .success(function (result) {
+                      $('#student').html(result);
+                  })
+
+                 .error(function (xhr, status) {
+                     alert("Record could not be deleted.");
+                 })
+
+        });
+
+
+        $('#btnCreate').click(function () {
+            
+            var nameVal = $('#txtName').val();
+            var DeptVal = $('#txtDept').val();
+            $.ajax({
+
+                url: '/Student/Create',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                data: { name: nameVal, Dept: DeptVal },
+                datatype: 'html'
+            })
+            .success(function (result) {
+                $('#student').html(result);
+                $('#EditDept').show().appendTo($('#student'));
+
+
+            })
+
+                .error(function (xhr, status) {
+                    alert("Record not added.");
+                })
+        });
+
+
+
+    </script>
+}

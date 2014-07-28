@@ -1,0 +1,24 @@
+﻿@using CRUDDemo.Models
+@model IEnumerable<Student>
+
+
+<h2>Students</h2>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>DepartmentName</th>
+    </tr>
+
+    @foreach (Student s in Model)
+    {
+        <tr>
+            <td>@s.Id</td>
+            <td>@s.Name</td>
+            <td>@s.DepartmentName</td>
+        </tr>
+    }
+
+
+</table>
+
