@@ -1,0 +1,84 @@
+﻿@model IEnumerable<EmployeeDemoCRUD.Models.Department>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+   
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+
+            $("#openDialog").live("click", function (e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+
+                $("#dialog-edit").dialog({
+                    title: 'Add Student',
+                  open: function (event, ui) {
+                        $(this).load(url);
+                    },
+                    close: function (event, ui) {
+                        $(this).dialog('close');
+                    }
+                });
+
+                $("#dialog-edit").dialog('open');
+                return false;
+            });
+
+    </script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                @Html.ActionLink("Create New", "AddEditDepartment", "Department", null, new { @id = "openDialog" })
+            </td>
+        </tr>
+    </table>
+    <table border="1">
+        <tr>
+            <th>
+                @Html.Label("DepartmentName")
+            </th>
+         
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+               
+                <td>
+                    @Html.ActionLink("Edit", "AddEditDepartment", new { id = item.DeptId }, new { @class = "editDialog" })|
+                   
+                    @Html.ActionLink("Delete", "DeleteRecord", new { id = item.DeptId }, new { @class = "confirmDialog" })
+                </td>
+            </tr>
+        }
+    </table>
+    <div id="dialog-confirm" style="display: none">
+        <p>
+            <span></span>
+            Are you sure to delete ?
+        </p>
+    </div>
+    <div id="dialog-edit" style="display: none">
+    </div>
+    <div id="dialog-view" style="display: none">
+    </div>
+</body>
+</html>
+
+
+
+
+

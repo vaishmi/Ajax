@@ -1,0 +1,174 @@
+﻿@model IEnumerable<Employee>
+
+@using EmployeeDemoCRUD.Models
+
+
+@{
+    ViewBag.Title = "Employee";
+}
+<div>
+    <div>
+        <h2>Employees</h2>
+    </div>
+    <p>Click the button to get employee list.</p>
+    <input type="button" id="btn" name="btn" value="Get Employee List" />
+    <input type="button" id="btnCreate" value="Create New"/>
+    <div id="employee" />
+</div>
+<div id="EditDept" style="display:none">
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>DepartmentName</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" id="txtId" name="txtId" />
+            </td>
+            <td>
+                <input id="txtDept" type="text" name="txtDept" />
+            </td>
+        </tr>
+    </table>
+    <input type="button" id="btnEdit" name="btnEdit" value="Update" />
+</div>
+<div id="CreateNew" style="display:none">
+    <table>
+        <tr>
+
+            <th> First Name </th>
+            <th> Last Name</th>
+          <th>Joining Date</th>
+            <th> Department Name</th>
+        </tr>
+        <tr>
+
+            <td>
+                <input id="txtFName" type="text" name="txtFName" />
+            </td>
+            
+            
+            <td>
+                <input id="txtLname" type="text" name="txtLname" />
+            </td>
+     
+       
+            <td>
+                <input id="txtDate" type="datetime" name="txtDate" />
+            </td>
+         
+      
+            <td>
+                <input id="txtDeptname" type="text"    name="txtDeptname" />
+            </td>
+            
+        </tr>
+    </table>
+    <input type="button" id="btnSave" name="btnSave" value="Save" />
+
+</div>
+<div id="Delete" style="display:none">
+    <table>
+        <tr>
+
+            <th> Id </th>
+        </tr>
+        <tr>
+
+            <td>
+                <input id="txtId" type="text" name="txtId" />
+            </td>
+        </tr>
+    </table>
+    <input type="button" id="btnDelete" name="btndelete" value="Delete" />
+
+</div>
+
+
+
+
+@section Scripts{
+    <script>
+
+
+        $('#btn').click(function () {
+
+            $.ajax({
+                url: '/Employee/GetEmployeeList',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+              .success(function (result) {
+                  $('#employee').html(result);
+                
+              })
+        .error(function (xhr, status) {
+            alert("Error");
+        })
+        });
+
+        $('#btnCreate').click(function () {
+            $('#CreateNew').show();
+            $('#btn').hide();
+            //$('#btncreate').hide();
+           
+
+            $('#btnSave').click(function () {
+
+                var FnameVal = $('#txtFName').val();
+                var LnameVal = $('#txtLname').val();
+                var dateVal = $('#txtDate').val();
+                var DeptVal = $('#txtDeptname').val();
+
+                $.ajax({
+                    url: '/Employee/Create',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { fn: FnameVal, ln: LnameVal, joindate: dateVal, deptname: DeptVal },
+                    datatype: 'html'
+                })
+           .success(function (result) {
+               $('#employee').html(result);
+               $('#CreateNew').hide();
+
+           })
+
+               .error(function (xhr, status) {
+                   alert("Record not added.");
+               })
+
+            })
+            
+           
+
+        });
+
+
+        $('#btnDelete').click(function () {
+
+            var idVal = $('#txtId').val();
+            $.ajax({
+
+                url: '/Student/Delete',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                data: { id: idVal },
+                datatype: 'html'
+
+            })
+                  .success(function (result) {
+                      $('#student').html(result);
+                  })
+
+                 .error(function (xhr, status) {
+                     alert("Record could not be deleted.");
+                 })
+
+        });
+
+
+      
+
+    </script>
+}

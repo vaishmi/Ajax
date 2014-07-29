@@ -1,0 +1,31 @@
+﻿@model EmployeeDemoCRUD.Models.Department
+
+
+@using (Ajax.BeginForm("AddEditDepartment", "Department", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DeptDialog" }))
+{
+    @Html.ValidationSummary(true)
+
+
+    @Html.HiddenFor(model => model.DeptId)
+
+    <div>
+        @Html.LabelFor(model => model.Name)
+    </div>
+     <div>
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+   
+    <p>
+        @if (ViewBag.IsUpdate == true)
+        {
+            <input type="submit" value="Update" id="btnUpdate" name="cmd" />
+        }
+        else
+        {
+            <input type="submit" value="Save" id="btnSave" name="cmd" />
+        }
+        <input type="button" value="Cancel" id="btncancel" />
+    </p>
+
+}
