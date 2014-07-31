@@ -1,0 +1,23 @@
+﻿@using EmployeeDemoCRUD.Models
+@model IEnumerable<Department>
+
+
+<h2>Department</h2>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Department Name</th>
+    </tr>
+
+    @foreach (Department d in Model)
+    {
+        <tr>
+            <td>@d.DeptId</td>
+            <td>@d.Name</td>
+         
+        </tr>
+    }
+
+
+</table>
+

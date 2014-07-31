@@ -13,74 +13,104 @@
     <p>Click the button to get employee list.</p>
     <input type="button" id="btn" name="btn" value="Get Employee List" />
     <input type="button" id="btnCreate" value="Create New"/>
+    <input type="button" id="btnUpdate" value="Update" />
+    <input type="button" id="btnDelete" value="Delete" />
     <div id="employee" />
-</div>
-<div id="EditDept" style="display:none">
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>DepartmentName</th>
-        </tr>
-        <tr>
-            <td>
-                <input type="text" id="txtId" name="txtId" />
-            </td>
-            <td>
-                <input id="txtDept" type="text" name="txtDept" />
-            </td>
-        </tr>
-    </table>
-    <input type="button" id="btnEdit" name="btnEdit" value="Update" />
 </div>
 <div id="CreateNew" style="display:none">
     <table>
         <tr>
 
             <th> First Name </th>
-            <th> Last Name</th>
-          <th>Joining Date</th>
-            <th> Department Name</th>
-        </tr>
-        <tr>
-
             <td>
                 <input id="txtFName" type="text" name="txtFName" />
             </td>
-            
-            
-            <td>
-                <input id="txtLname" type="text" name="txtLname" />
-            </td>
-     
-       
-            <td>
-                <input id="txtDate" type="datetime" name="txtDate" />
-            </td>
-         
-      
-            <td>
-                <input id="txtDeptname" type="text"    name="txtDeptname" />
-            </td>
-            
         </tr>
+        <tr>
+            <th> Last Name</th>
+
+            <td>
+                <input id="txtLName" type="text" name="txtLName" />
+            </td>
+        </tr>
+        <tr>
+            <th> Contact No</th>
+
+            <td>
+                <input id="txtContact" type="number" name="txtContact" />
+            </td>
+        </tr>
+        <tr>
+            <th>Joining Date</th>
+            <td>
+                <input id="txtDate" type="date" name="txtDate" />
+            </td>
+        </tr>
+        <tr>
+
+            <th> Department Name</th>
+            <td>
+                <input id="txtDeptname" type="text" name="txtDeptname" />
+            </td>
+        </tr>
+
     </table>
     <input type="button" id="btnSave" name="btnSave" value="Save" />
 
 </div>
+<div id="Edit" style="display:none">
+    <table>
+        <tr>
+            <th> Emp Id</th>
+            <td>
+                <input type="text" id="txtId" name="txtId" />
+            </td>
+            </tr>
+        <tr>
+            <th>First Name</th>
+            <td>
+                <input id="txtFname" type="text" name="txtFname" />
+            </td>
+            </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>
+                <input id="txtLname" type="text" name="txtLname" />
+            </td>
+            </tr>
+        <tr>
+        <tr>
+            <th>Contact Number</th>
+            <td>
+                <input id="txtContactno" type="number" name="txtContactno" />
+            </td>
+        </tr>
+        <tr>
+
+            <th>Department Name</th>
+            <td>
+                <input id="txtDname" type="text" name="txtDname" />
+            </td>
+        </tr>
+        
+    </table>
+    <input type="button" id="btnEdit" name="btnEdit" value="Update" />
+</div>
+
 <div id="Delete" style="display:none">
     <table>
         <tr>
 
-            <th> Id </th>
+            <th>Emp Id </th>
         </tr>
         <tr>
 
             <td>
-                <input id="txtId" type="text" name="txtId" />
+                <input id="txtid" type="text" name="txtid" />
             </td>
         </tr>
     </table>
-    <input type="button" id="btnDelete" name="btndelete" value="Delete" />
+    <input type="button" id="Del" name="btnDel" value="Delete" />
 
 </div>
 
@@ -110,14 +140,15 @@
 
         $('#btnCreate').click(function () {
             $('#CreateNew').show();
-            $('#btn').hide();
-            //$('#btncreate').hide();
+            
+            
            
 
             $('#btnSave').click(function () {
 
                 var FnameVal = $('#txtFName').val();
-                var LnameVal = $('#txtLname').val();
+                var LnameVal = $('#txtLName').val();
+                var ConVal = $('#txtContact').val();
                 var dateVal = $('#txtDate').val();
                 var DeptVal = $('#txtDeptname').val();
 
@@ -125,12 +156,12 @@
                     url: '/Employee/Create',
                     contentType: 'application/html; charset=utf-8',
                     type: 'GET',
-                    data: { fn: FnameVal, ln: LnameVal, joindate: dateVal, deptname: DeptVal },
+                    data: { fn: FnameVal, ln: LnameVal,cn:ConVal, joindate: dateVal, deptname: DeptVal },
                     datatype: 'html'
                 })
            .success(function (result) {
                $('#employee').html(result);
-               $('#CreateNew').hide();
+             $('#CreateNew').hide();
 
            })
 
@@ -145,25 +176,71 @@
         });
 
 
+        $('#btnUpdate').click(function () {
+            $('#Edit').show();
+          
+             $('#btnEdit').click(function () {
+                var IdVal = $('#txtId').val();
+                var fname = $('#txtFname').val();
+                var lname = $('#txtLname').val();
+                var cnoVal = $('#txtContactno').val();
+                
+                var DenameVal = $('#txtDname').val();
+
+                $.ajax({
+                    url: '/Employee/Edit',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { id: IdVal, fn1: fname, ln1: lname,conNum:cnoVal, deptname1: DenameVal },
+                    datatype: 'html'
+                })
+           .success(function (result) {
+               $('#employee').html(result);
+               $('#Edit').hide();
+               $('#btnCreate').hide();
+               $('#btn').hide();
+
+           })
+
+               .error(function (xhr, status) {
+                   alert("Record not updated.");
+               })
+
+            })
+
+
+
+        });
+
+
         $('#btnDelete').click(function () {
 
-            var idVal = $('#txtId').val();
+            $('#Delete').show();
+            $('#btn').hide();
+            $('#btnUpdate').hide();
+            $('#btnCreate').hide();
+
+            $('#Del').click(function(){
+
+                var idValue = $('#txtid').val();
             $.ajax({
 
-                url: '/Student/Delete',
+                url: '/Employee/Delete',
                 contentType: 'application/html; charset=utf-8',
                 type: 'GET',
-                data: { id: idVal },
+                data: { idV: idValue },
                 datatype: 'html'
 
             })
                   .success(function (result) {
-                      $('#student').html(result);
+                      $('#employee').html(result);
+                      $('#Delete').hide();
                   })
 
                  .error(function (xhr, status) {
                      alert("Record could not be deleted.");
                  })
+            })
 
         });
 

@@ -13,6 +13,8 @@ namespace EmployeeDemoCRUD.Models
         public string FirstName { get; set; }
          [Display(Name = "Lats Name")]
         public string LastName { get; set; }
+        [Display(Name="Contact No")]
+         public long Contactno { get; set; }
          [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
          public DateTime JoiningDate { get; set; }
        

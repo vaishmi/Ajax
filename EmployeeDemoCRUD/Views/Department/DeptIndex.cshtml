@@ -1,84 +1,198 @@
-﻿@model IEnumerable<EmployeeDemoCRUD.Models.Department>
+﻿@model IEnumerable<Department>
+
+@using EmployeeDemoCRUD.Models
+
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Department";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-   
-    <script type="text/javascript">
-        $(document).ready(function () {
+<div>
+    <div>
+        <h2>Department</h2>
+    </div>
+    <p>Click the button to get department list.</p>
+    <input type="button" id="btn" name="btn" value="Get Department List" />
+    <input type="button" id="btnCreate" value="Create New" />
+    <input type="button" id="btnUpdate" value="Update" />
+    <input type="button" id="btnDelete" value="Delete" />
+    <div id="department" />
+</div>
+<div id="CreateNew" style="display:none">
+    <table>
 
-            $.ajaxSetup({ cache: false });
+        <tr>
+            <th> Department Name</th>
+            <td>
+                <input id="txtDeptname" type="text" name="txtDeptname" />
+            </td>
+        </tr>
 
-            $("#openDialog").live("click", function (e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
+    </table>
+    <input type="button" id="btnSave" name="btnSave" value="Save" />
 
-                $("#dialog-edit").dialog({
-                    title: 'Add Student',
-                  open: function (event, ui) {
-                        $(this).load(url);
-                    },
-                    close: function (event, ui) {
-                        $(this).dialog('close');
-                    }
-                });
-
-                $("#dialog-edit").dialog('open');
-                return false;
-            });
-
-    </script>
-</head>
-
-<body>
+</div>
+<div id="Edit" style="display:none">
     <table>
         <tr>
+            <th> Dept Id</th>
             <td>
-                @Html.ActionLink("Create New", "AddEditDepartment", "Department", null, new { @id = "openDialog" })
+                <input type="text" id="txtId" name="txtId" />
+            </td>
+        </tr>
+       <tr>
+
+            <th>Department Name</th>
+            <td>
+                <input id="txtDname" type="text" name="txtDname" />
+            </td>
+        </tr>
+
+    </table>
+    <input type="button" id="btnEdit" name="btnEdit" value="Update" />
+</div>
+
+<div id="Delete" style="display:none">
+    <table>
+        <tr>
+
+            <th>Dept Id </th>
+        </tr>
+        <tr>
+
+            <td>
+                <input id="txtid" type="text" name="txtid" />
             </td>
         </tr>
     </table>
-    <table border="1">
-        <tr>
-            <th>
-                @Html.Label("DepartmentName")
-            </th>
-         
-        </tr>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-               
-                <td>
-                    @Html.ActionLink("Edit", "AddEditDepartment", new { id = item.DeptId }, new { @class = "editDialog" })|
-                   
-                    @Html.ActionLink("Delete", "DeleteRecord", new { id = item.DeptId }, new { @class = "confirmDialog" })
-                </td>
-            </tr>
-        }
-    </table>
-    <div id="dialog-confirm" style="display: none">
-        <p>
-            <span></span>
-            Are you sure to delete ?
-        </p>
-    </div>
-    <div id="dialog-edit" style="display: none">
-    </div>
-    <div id="dialog-view" style="display: none">
-    </div>
-</body>
-</html>
+    <input type="button" id="Del" name="btnDel" value="Delete" />
+
+</div>
 
 
 
 
+@section Scripts{
+    <script>
 
+
+        $('#btn').click(function () {
+
+            $.ajax({
+                url: '/Department/GetDepartmentList',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+              .success(function (result) {
+                  $('#department').html(result);
+
+              })
+        .error(function (xhr, status) {
+            alert("Error");
+        })
+        });
+
+        $('#btnCreate').click(function () {
+            $('#CreateNew').show();
+
+
+
+
+            $('#btnSave').click(function () {
+
+                
+                var DeptVal = $('#txtDeptname').val();
+
+                $.ajax({
+                    url: '/Department/Create',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { deptname: DeptVal },
+                    datatype: 'html'
+                })
+           .success(function (result) {
+               $('#department').html(result);
+               $('#CreateNew').hide();
+
+           })
+
+               .error(function (xhr, status) {
+                   alert("Record not added.");
+               })
+
+            })
+
+
+
+        });
+
+
+        $('#btnUpdate').click(function () {
+            $('#Edit').show();
+
+            $('#btnEdit').click(function () {
+                var IdVal = $('#txtId').val();
+                var DenameVal = $('#txtDname').val();
+
+                $.ajax({
+                    url: '/Department/Edit',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { id: IdVal, deptname1: DenameVal },
+                    datatype: 'html'
+                })
+           .success(function (result) {
+               $('#department').html(result);
+               $('#Edit').hide();
+                $('#btnCreate').hide();
+               $('#btn').hide();
+
+           })
+
+               .error(function (xhr, status) {
+                   alert("Record not updated.");
+               })
+
+            })
+
+
+
+        });
+
+
+        $('#btnDelete').click(function () {
+
+            $('#Delete').show();
+            $('#btn').hide();
+            $('#btnupdate').hide();
+            $('#btncreate').hide();
+
+            $('#Del').click(function () {
+
+                var idValue = $('#txtid').val();
+                $.ajax({
+
+                    url: '/Department/Delete',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { idV: idValue },
+                    datatype: 'html'
+
+                })
+                      .success(function (result) {
+                          $('#department').html(result);
+                          $('#Delete').hide();
+                      })
+
+                     .error(function (xhr, status) {
+                         alert("Record could not be deleted.");
+                     })
+            })
+
+        });
+
+
+
+
+    </script>
+}

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace EmployeeDemoCRUD.Models
 {
-    public class EmpDb : DbContext
+    public class EmpContext : DbContext
     {
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Department> Department { get; set; }
